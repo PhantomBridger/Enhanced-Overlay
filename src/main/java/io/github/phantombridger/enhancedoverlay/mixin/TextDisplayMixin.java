@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(TextDisplayEntityRenderer.class)
 public class TextDisplayMixin {
+    // Force text display shadow
     @ModifyVariable(
             method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V",
             at = @At(value = "STORE"),
@@ -17,6 +18,8 @@ public class TextDisplayMixin {
     private boolean forceTextDisplayShadow(boolean original) {
         return true;
     }
+
+    // Remove text display background
     @Redirect(
             method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;"
                     + "Lnet/minecraft/client/util/math/MatrixStack;"

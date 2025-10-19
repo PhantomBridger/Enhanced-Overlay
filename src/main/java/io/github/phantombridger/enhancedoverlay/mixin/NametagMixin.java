@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(EntityRenderer.class)
 public class NametagMixin {
+    // Force nametag shadow
     @ModifyArg(
             method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/EntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(
@@ -19,6 +20,7 @@ public class NametagMixin {
         return true;
     }
 
+    // Remove nametag background
     @ModifyArg(
             method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/EntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(InGameHud.class)
 public class ScoreboardMixin {
-    private static final boolean scoreboardModificationsEnabled = true;
+    // Remove scoreboard title background
     @ModifyArg(
             method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -19,12 +19,9 @@ public class ScoreboardMixin {
             index = 4
     )
     private int removeScoreboardTitleBackground(int color) {
-        if (scoreboardModificationsEnabled) {
-            return 0;
-        } else {
-            return color;
-        }
+        return 0;
     }
+    // Remove scoreboard main background
     @ModifyArg(
             method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -35,12 +32,9 @@ public class ScoreboardMixin {
             index = 4
     )
     private int removeScoreboardMainBackground(int color) {
-        if (scoreboardModificationsEnabled) {
-            return 0;
-        } else {
-            return color;
-        }
+        return 0;
     }
+    // Force scoreboard text shadow
     @ModifyArg(
             method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -50,10 +44,6 @@ public class ScoreboardMixin {
             index = 5
     )
     private boolean forceScoreboardTextShadow(boolean shadow) {
-        if (scoreboardModificationsEnabled) {
-            return true;
-        } else {
-            return shadow;
-        }
+        return true;
     }
 }

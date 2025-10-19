@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PlayerListHud.class)
 public class TablistMixin {
+    // remove tablist background one
     @ModifyArg(
             method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -19,6 +20,8 @@ public class TablistMixin {
     private int removeTablistBackgroundOne(int color) {
         return 0;
     }
+
+    // remove tablist background two
     @ModifyArg(
             method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -31,6 +34,8 @@ public class TablistMixin {
     private int removeTablistBackgroundTwo(int color) {
         return 0;
     }
+
+    // set a tablist username background so it doesn't get removed when background opacity is set to 0 for everything in minecraft settings
     @ModifyArg(
             method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
@@ -43,6 +48,8 @@ public class TablistMixin {
     private int modifyTablistUsernameBackground(int color) {
         return 553648127;
     }
+
+    // remove tablist background three
     @ModifyArg(
             method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At(
