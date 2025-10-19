@@ -35,20 +35,6 @@ public class TablistMixin {
         return 0;
     }
 
-    // set a tablist username background so it doesn't get removed when background opacity is set to 0 for everything in minecraft settings
-    @ModifyArg(
-            method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V",
-                    ordinal = 2
-            ),
-            index = 4
-    )
-    private int modifyTablistUsernameBackground(int color) {
-        return 553648127;
-    }
-
     // remove tablist background three
     @ModifyArg(
             method = "render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
