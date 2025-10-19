@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"package": "io.github.phantombridger.enhancedoverlay.mixin",
+	"compatibilityLevel": "JAVA_21",
+    "refmap": "enhanced-overlay-refmap.json",
+	"mixins": [
+		"ScoreboardMixin",
+        "TablistMixin",
+        "SubtitleMixin",
+        "NametagMixin",
+        "TextDisplayMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "enhanced-overlay",
+	"version": "${version}",
+	"name": "Enhanced Overlay",
+	"description": "Modifications to the Minecraft rendering",
+	"authors": [
+		"PhantomBridger"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": "https://github.com/PhantomBridger/Enhanced-Overlay"
+	},
+	"license": "MPL-2.0",
+	"icon": "assets/enhanced-overlay/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"io.github.phantombridger.enhancedoverlay.EnhancedOverlay"
+		]
+	},
+	"mixins": [
+		"enhanced-overlay.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
