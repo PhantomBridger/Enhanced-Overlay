@@ -1,11 +1,13 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.TextDisplayShadowMode;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.DisplayEntityRenderer.TextDisplayEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 
 @Mixin(TextDisplayEntityRenderer.class)
 public class TextDisplayMixin {
@@ -16,7 +18,15 @@ public class TextDisplayMixin {
             ordinal = 2
     )
     private boolean forceTextDisplayShadow(boolean original) {
-        return true;
+        if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.True) {
+            return true;
+        } else if  (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.False){
+            return false;
+        } else if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Default) {
+            return original;
+        } else {
+            return original; // this was added so it doesn't break if the value is not True, False or Default
+        }
     }
 
     // Remove text display background
@@ -30,6 +40,10 @@ public class TextDisplayMixin {
             )
     )
     private VertexConsumer forceRemoveBackgroundColor(VertexConsumer instance, int j) {
-        return instance.color(0);
+        if (ConfigScreen.CONFIG.instance().forceRemoveTextDisplayBackground) {
+            return instance.color(0);
+        } else {
+            return instance.color(j);
+        }
     }
 }

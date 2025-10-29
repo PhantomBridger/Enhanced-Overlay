@@ -1,5 +1,6 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 import net.minecraft.client.gui.hud.SubtitlesHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +18,11 @@ public class SubtitleMixin {
             ),
             index = 4
     )
-    private int removeSubtitlesBackground(int color) {
-        return 0;
+    private int disableSubtitleBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().removeSubtitleBackground) {
+            return 0;
+        } else {
+            return color;
+        }
     }
 }

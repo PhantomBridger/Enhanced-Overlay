@@ -8,7 +8,7 @@
 		"PhantomBridger"
 	],
 	"contact": {
-		"homepage": "",
+		"homepage": "https://modrinth.com/mod/enhanced-overlay",
 		"sources": "https://github.com/PhantomBridger/Enhanced-Overlay"
 	},
 	"license": "MPL-2.0",
@@ -17,7 +17,10 @@
 	"entrypoints": {
 		"main": [
 			"io.github.phantombridger.enhancedoverlay.EnhancedOverlay"
-		]
+		],
+        "modmenu": [
+          "io.github.phantombridger.enhancedoverlay.config.ModMenuIntegration"
+        ]
 	},
 	"mixins": [
 		"enhanced-overlay.mixins.json"
@@ -26,9 +29,9 @@
 		"fabricloader": ">=0.17.3",
 		"minecraft": "~1.21.4",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+        "yet_another_config_lib_v3": ">=3.6.2"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }

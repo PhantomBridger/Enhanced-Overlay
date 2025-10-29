@@ -4,6 +4,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 
 @Mixin(EntityRenderer.class)
 public class NametagMixin {
@@ -16,8 +17,12 @@ public class NametagMixin {
             ),
             index = 4
     )
-    private boolean forceNametagShadow(boolean shadow) {
-        return true;
+    private boolean enableNametagTextShadow(boolean shadow) {
+        if (ConfigScreen.CONFIG.instance().nametagShadow) {
+            return true;
+        } else {
+            return shadow;
+        }
     }
 
     // Remove nametag background
@@ -29,7 +34,11 @@ public class NametagMixin {
             ),
             index = 8
     )
-    private int removeNametagBackground(int color) {
-        return 0;
+    private int disableNametagBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().removeNametagBackground) {
+            return 0;
+        } else {
+            return color;
+        }
     }
 }

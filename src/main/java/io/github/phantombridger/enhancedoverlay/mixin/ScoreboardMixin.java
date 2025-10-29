@@ -4,7 +4,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
+import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 
 @Mixin(InGameHud.class)
 public class ScoreboardMixin {
@@ -18,8 +18,12 @@ public class ScoreboardMixin {
             ),
             index = 4
     )
-    private int removeScoreboardTitleBackground(int color) {
-        return 0;
+    private int disableScoreboardTitleBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().removeScoreboardBackground) {
+            return 0;
+        } else {
+            return color;
+        }
     }
     // Remove scoreboard main background
     @ModifyArg(
@@ -31,8 +35,12 @@ public class ScoreboardMixin {
             ),
             index = 4
     )
-    private int removeScoreboardMainBackground(int color) {
-        return 0;
+    private int disableScoreboardMainBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().removeScoreboardBackground) {
+            return 0;
+        } else {
+            return color;
+        }
     }
     // Force scoreboard text shadow
     @ModifyArg(
@@ -43,7 +51,11 @@ public class ScoreboardMixin {
             ),
             index = 5
     )
-    private boolean forceScoreboardTextShadow(boolean shadow) {
-        return true;
+    private boolean enableScoreboardTextShadow(boolean shadow) {
+        if (ConfigScreen.CONFIG.instance().scoreboardTextShadow) {
+            return true;
+        } else {
+            return shadow;
+        }
     }
 }
