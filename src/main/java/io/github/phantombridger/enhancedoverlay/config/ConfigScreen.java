@@ -28,7 +28,7 @@ public class ConfigScreen {
     @SerialEntry public boolean removeSubtitleBackground = true;
     @SerialEntry public boolean removeTablistBackground = true;
     @SerialEntry public boolean removeTablistUsernameBackground = false;
-    @SerialEntry public TextDisplayShadowMode forceTextDisplayShadow = TextDisplayShadowMode.True;
+    @SerialEntry public TextDisplayShadowMode forceTextDisplayShadow = TextDisplayShadowMode.Enable;
     @SerialEntry public boolean forceRemoveTextDisplayBackground = true;
 
     public static Screen configScreen(Screen parent) {
@@ -100,8 +100,8 @@ public class ConfigScreen {
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
                                 .option(Option.<TextDisplayShadowMode>createBuilder()
-                                        .name(Text.literal("Force Text Display Shadow"))
-                                        .description(OptionDescription.of(Text.literal("Makes it so Text Displays are always rendered with Text Shadow")))
+                                        .name(Text.literal("Force Enable/Disable Text Display Shadow"))
+                                        .description(OptionDescription.of(Text.literal("Force Text Shadow to always be enabled or disabled for Text Displays, if set to Default it keeps the value decided by the command that was used to spawn the Text Display")))
                                         .binding(defaults.forceTextDisplayShadow, () -> config.forceTextDisplayShadow, newVal -> config.forceTextDisplayShadow = newVal)
                                         .controller((opt) ->
                                                 EnumControllerBuilder.create(opt)

@@ -18,9 +18,9 @@ public class TextDisplayMixin {
             ordinal = 2
     )
     private boolean forceTextDisplayShadow(boolean original) {
-        if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.True) {
+        if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Enable) {
             return true;
-        } else if  (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.False){
+        } else if  (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Disable){
             return false;
         } else if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Default) {
             return original;
