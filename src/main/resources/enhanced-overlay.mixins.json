@@ -8,7 +8,8 @@
         "TablistMixin",
         "SubtitleMixin",
         "NametagMixin",
-        "TextDisplayMixin"
+        "TextDisplayMixin",
+        "HitboxMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
