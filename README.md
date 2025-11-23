@@ -42,10 +42,6 @@ Uses [YetAnotherConfigLib](https://modrinth.com/mod/yacl) for the config.
 
 In Minecraft Accessibility Settings
 - Background opacity: 0%
-- Text Background:
-  - Chat (if you just want chat to have no background as well)
-  - Everywhere (if you also want to remove the background behind usernames in tablist)
-
 
 ---
 
@@ -59,11 +55,13 @@ In Minecraft Accessibility Settings
   - ✅/❌ Tablist changes work when lunars tablist mod is disabled
   - ✅/❌ Subtitle changes work when lunars subtitles mod is disabled
   - ❌ Nametag changes break with lunar (don't get applied even when lunars nametag mod is disabled)
-  - ✅ Hitbox customization works even with lunars hitbox mod enabled, it just wont apply the lunar hitbox settings
+  - ✅ Hitbox customization works even with lunars hitbox mod enabled, it just wont apply the lunar hitbox settings (1.21.4)
+  - ✅ Custom Hitboxes work with lunar because they don't modify vanilla hitboxes (1.21.8+)
 - Feather Client: partially compatible
   - ✅ Text Display changes work
   - ✅ Subtitle changes work with feathers subtitles mod
   - ❌ Nametag changes break with feather (background is enabled even when feathers nametag mod is disabled)
   - ✅/❌ Tablist changes work when feathers tablist mod is disabled
   - ❌ Scoreboard changes break because disabling feathers scoreboard mod removes the scoreboard entirely
-  - ✅/❌ Hitbox customization works when feathers hitbox mod is disabled
+  - ✅/❌ Hitbox customization works when feathers hitbox mod is disabled (1.21.4)
+  - ✅ Custom Hitboxes work with feather because they don't modify vanilla hitboxes (1.21.8+)
