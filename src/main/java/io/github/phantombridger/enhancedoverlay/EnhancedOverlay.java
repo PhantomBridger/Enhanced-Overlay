@@ -23,6 +23,8 @@ public class EnhancedOverlay implements ModInitializer {
 
         ConfigScreen.CONFIG.load();
 
+		CustomHitboxRenderer.renderCustomHitboxes();
+
 		LOGGER.info("Loaded Enhanced Overlay");
 	}
 }

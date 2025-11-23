@@ -4,12 +4,11 @@
 	"compatibilityLevel": "JAVA_21",
     "refmap": "enhanced-overlay-refmap.json",
 	"mixins": [
-		"ScoreboardMixin",
-        "TablistMixin",
-        "SubtitleMixin",
         "NametagMixin",
-        "TextDisplayMixin",
-        "HitboxMixin"
+        "ScoreboardMixin",
+		"SubtitleMixin",
+        "TablistMixin",
+        "TextDisplayMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

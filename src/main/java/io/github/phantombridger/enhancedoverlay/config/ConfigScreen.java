@@ -7,6 +7,7 @@ import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
@@ -36,6 +37,7 @@ public class ConfigScreen {
 
     @SerialEntry public boolean customHitboxMode = true;
     @SerialEntry public Color customHitboxColor = new Color(255, 255, 255, 255);
+    @SerialEntry public int customHitboxRenderDistance = 10;
     @SerialEntry public boolean playerDefaultHitbox = false;
     @SerialEntry public boolean playerSneakingHitbox = false;
     @SerialEntry public boolean playerSwimmingHitbox = true;
@@ -131,19 +133,29 @@ public class ConfigScreen {
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.literal("Hitboxes"))
-                        .tooltip(Text.literal("Configure Hitbox Modifications"))
+                        .name(Text.literal("Custom Hitboxes"))
+                        .tooltip(Text.literal("Configure Custom Hitboxes"))
                         .option(Option.<Boolean>createBuilder()
-                                .name(Text.literal("Only render selected Hitboxes"))
-                                .description(OptionDescription.of(Text.literal("This makes it so only some hitboxes are rendered and they are rendered without additional lines like the direction entities are looking at. Requires hitboxes to be enabled with F3+B")))
+                                .name(Text.literal("Render selected Hitboxes"))
+                                .description(OptionDescription.of(Text.literal("This enables custom hitboxes. Vanilla hitboxes are not required and should be disabled for it to work properly.")))
                                 .binding(defaults.customHitboxMode, () -> config.customHitboxMode, newVal -> config.customHitboxMode = newVal)
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Color>createBuilder()
                                 .name(Text.literal("Hitbox Color"))
-                                .description(OptionDescription.of(Text.literal("This changes the color of Hitboxes. Requires Only render selected Hitboxes to be enabled")))
+                                .description(OptionDescription.of(Text.literal("This changes the color of the custom Hitboxes")))
                                 .binding(defaults.customHitboxColor, () -> config.customHitboxColor, newVal -> config.customHitboxColor = newVal)
                                 .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                .build())
+                        .option(Option.<Integer>createBuilder()
+                                .name(Text.literal("Hitbox render distance"))
+                                .description(OptionDescription.of(Text.literal("Changes the render distance of the custom hitboxes")))
+                                .binding(defaults.customHitboxRenderDistance, () -> config.customHitboxRenderDistance, newVal -> config.customHitboxRenderDistance = newVal)
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 32)
+                                        .step(1)
+                                        .valueFormatter(val -> Text.literal(val + " chunks"))
+                                )
                                 .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Player Hitboxes"))
