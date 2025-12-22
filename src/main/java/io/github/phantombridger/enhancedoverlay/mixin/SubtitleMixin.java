@@ -1,5 +1,6 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 import net.minecraft.client.gui.hud.SubtitlesHud;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,11 +19,15 @@ public class SubtitleMixin {
             ),
             index = 4
     )
-    private int disableSubtitleBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().removeSubtitleBackground) {
+    private int subtitleBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().subtitleBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().subtitleBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().subtitleBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().subtitleBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 }

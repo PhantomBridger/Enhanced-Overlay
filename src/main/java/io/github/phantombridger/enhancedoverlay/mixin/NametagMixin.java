@@ -1,5 +1,7 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
+import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
 import net.minecraft.client.render.entity.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,11 +19,15 @@ public class NametagMixin {
             ),
             index = 4
     )
-    private boolean enableNametagTextShadow(boolean shadow) {
-        if (ConfigScreen.CONFIG.instance().nametagShadow) {
+    private boolean nametagTextShadow(boolean shadow) {
+        if (ConfigScreen.CONFIG.instance().nametagTextShadow == TextShadowMode.ENABLED) {
             return true;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().nametagTextShadow == TextShadowMode.DISABLED){
+            return false;
+        } else if (ConfigScreen.CONFIG.instance().nametagTextShadow == TextShadowMode.DEFAULT) {
             return shadow;
+        } else {
+            return shadow; // added this so it doesn't break if the value is not ENABLED, DISABLED or DEFAULT
         }
     }
 
@@ -34,11 +40,15 @@ public class NametagMixin {
             ),
             index = 8
     )
-    private int disableNametagBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().removeNametagBackground) {
+    private int nametagBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().nametagBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().nametagBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().nametagBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().nametagBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 }

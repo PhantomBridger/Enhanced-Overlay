@@ -1,5 +1,6 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,11 +19,15 @@ public class TablistMixin {
             ),
             index = 4
     )
-    private int disableTablistBackgroundOne(int color) {
-        if (ConfigScreen.CONFIG.instance().removeTablistBackground) {
+    private int tablistBackgroundOne(int color) {
+        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 
@@ -36,11 +41,15 @@ public class TablistMixin {
             ),
             index = 4
     )
-    private int disableTablistBackgroundTwo(int color) {
-        if (ConfigScreen.CONFIG.instance().removeTablistBackground) {
+    private int tablistBackgroundTwo(int color) {
+        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 
@@ -54,11 +63,15 @@ public class TablistMixin {
             ),
             index = 4
     )
-    private int disableTablistUsernameBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().removeTablistUsernameBackground) {
+    private int tablistUsernameBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().tablistUsernameBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().tablistUsernameBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().tablistUsernameBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().tablistUsernameBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 
@@ -72,11 +85,15 @@ public class TablistMixin {
             ),
             index = 4
     )
-    private int disableTablistBackgroundThree(int color) {
-        if (ConfigScreen.CONFIG.instance().removeTablistBackground) {
+    private int tablistBackgroundThree(int color) {
+        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
 }

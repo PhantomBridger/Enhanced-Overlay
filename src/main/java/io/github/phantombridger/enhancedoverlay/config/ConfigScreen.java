@@ -25,30 +25,48 @@ public class ConfigScreen {
                     .build())
             .build();
 
-    @SerialEntry public boolean removeNametagBackground = true;
-    @SerialEntry public boolean nametagShadow = true;
-    @SerialEntry public boolean removeScoreboardBackground = true;
-    @SerialEntry public boolean scoreboardTextShadow = true;
-    @SerialEntry public boolean removeSubtitleBackground = true;
-    @SerialEntry public boolean removeTablistBackground = true;
-    @SerialEntry public boolean removeTablistUsernameBackground = false;
-    @SerialEntry public TextDisplayShadowMode forceTextDisplayShadow = TextDisplayShadowMode.Enable;
-    @SerialEntry public boolean forceRemoveTextDisplayBackground = true;
+    @SerialEntry public BackgroundColorMode nametagBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color nametagBackgroundColor = new Color(0, 0, 0, 42);
+    @SerialEntry public TextShadowMode nametagTextShadow = TextShadowMode.ENABLED;
+
+    @SerialEntry public BackgroundColorMode scoreboardBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color scoreboardBackgroundColor = new Color(0, 0, 0, 42);
+    @SerialEntry public TextShadowMode scoreboardTextShadow = TextShadowMode.ENABLED;
+
+    @SerialEntry public BackgroundColorMode subtitleBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color subtitleBackgroundColor = new Color(0, 0, 0, 42);
+
+    @SerialEntry public BackgroundColorMode tablistBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color tablistBackgroundColor = new Color(0, 0, 0, 42);
+    @SerialEntry public BackgroundColorMode tablistUsernameBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color tablistUsernameBackgroundColor = new Color(0, 0, 0, 42);
+
+    @SerialEntry public BackgroundColorMode debugScreenBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color debugScreenBackgroundColor = new Color(0, 0, 0, 42);
+    @SerialEntry public TextShadowMode debugScreenTextShadow = TextShadowMode.ENABLED;
+
+    @SerialEntry public TextShadowMode textDisplayShadow = TextShadowMode.ENABLED;
+    @SerialEntry public BackgroundColorMode textDisplayBackground = BackgroundColorMode.NONE;
+    @SerialEntry public Color textDisplayBackgroundColor = new Color(0, 0, 0, 42);
+
 
     @SerialEntry public boolean customHitboxMode = true;
     @SerialEntry public Color customHitboxColor = new Color(255, 255, 255, 255);
     @SerialEntry public int customHitboxRenderDistance = 10;
+
     @SerialEntry public boolean playerDefaultHitbox = false;
     @SerialEntry public boolean playerSneakingHitbox = false;
     @SerialEntry public boolean playerSwimmingHitbox = true;
     @SerialEntry public boolean playerElytraHitbox = true;
     @SerialEntry public boolean playerCrawlingHitbox = true;
     @SerialEntry public boolean playerSleepingHitbox = false;
-    @SerialEntry public boolean boatHitbox = true;
+
+    @SerialEntry public boolean boatHitbox = false;
     @SerialEntry public boolean arrowHitbox = true;
     @SerialEntry public boolean tridentHitbox = true;
     @SerialEntry public boolean fishingBobberHitbox = false;
-    @SerialEntry public boolean enderPearlHitbox = false;
+    @SerialEntry public boolean enderPearlHitbox = true;
+    @SerialEntry public boolean windChargeHitbox = true;
     @SerialEntry public boolean xpOrbHitbox = false;
     @SerialEntry public boolean endCrystalHitbox = false;
     @SerialEntry public boolean otherEntityHitbox = false;
@@ -57,78 +75,165 @@ public class ConfigScreen {
         return YetAnotherConfigLib.create(CONFIG, ((defaults, config, builder) -> builder
                 .title(Text.literal("Enhanced Overlay"))
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.literal("HUD Modifications"))
-                        .tooltip(Text.literal("Configure HUD Modifications"))
+                        .name(Text.literal("Render Modifications"))
+                        .tooltip(Text.literal("Configure Render Modifications"))
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Nametags"))
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Remove Nametag Background"))
-                                        .description(OptionDescription.of(Text.literal("Removes the Background of Nametags")))
-                                        .binding(defaults.removeNametagBackground, () -> config.removeNametagBackground, newVal -> config.removeNametagBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Nametag Background Color Option"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.nametagBackground, () -> config.nametagBackground, newVal -> config.nametagBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
-                                .option(Option.<Boolean>createBuilder()
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Nametag Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the nametag background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.nametagBackgroundColor, () -> config.nametagBackgroundColor, newVal -> config.nametagBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .option(Option.<TextShadowMode>createBuilder()
                                         .name(Text.literal("Nametag Text Shadow"))
-                                        .description(OptionDescription.of(Text.literal("Adds Text Shadow to Nametags")))
-                                        .binding(defaults.nametagShadow, () -> config.nametagShadow, newVal -> config.nametagShadow = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                        .description(OptionDescription.of(Text.literal("Choose if you want text shadow for nametags")))
+                                        .binding(defaults.nametagTextShadow, () -> config.nametagTextShadow, newVal -> config.nametagTextShadow = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(TextShadowMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
                                 .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Scoreboard"))
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Remove Scoreboard Background"))
-                                        .description(OptionDescription.of(Text.literal("Removes the Background of the Scoreboard")))
-                                        .binding(defaults.removeScoreboardBackground, () -> config.removeScoreboardBackground, newVal -> config.removeScoreboardBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Scoreboard Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.scoreboardBackground, () -> config.scoreboardBackground, newVal -> config.scoreboardBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
-                                .option(Option.<Boolean>createBuilder()
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Scoreboard Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the scoreboard background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.scoreboardBackgroundColor, () -> config.scoreboardBackgroundColor, newVal -> config.scoreboardBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .option(Option.<TextShadowMode>createBuilder()
                                         .name(Text.literal("Scoreboard Text Shadow"))
-                                        .description(OptionDescription.of(Text.literal("Adds Text Shadow to the Scoreboard")))
+                                        .description(OptionDescription.of(Text.literal("Choose if you want text shadow for the scoreboard")))
                                         .binding(defaults.scoreboardTextShadow, () -> config.scoreboardTextShadow, newVal -> config.scoreboardTextShadow = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(TextShadowMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
                                 .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Subtitles"))
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Remove Subtitle Background"))
-                                        .description(OptionDescription.of(Text.literal("Removes the Background of the Subtitles")))
-                                        .binding(defaults.removeSubtitleBackground, () -> config.removeSubtitleBackground, newVal -> config.removeSubtitleBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Subtitles Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.subtitleBackground, () -> config.subtitleBackground, newVal -> config.subtitleBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
+                                        .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Subtitles Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the subtitles background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.subtitleBackgroundColor, () -> config.subtitleBackgroundColor, newVal -> config.subtitleBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
                                         .build())
                                 .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Tablist"))
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Remove Tablist Background"))
-                                        .description(OptionDescription.of(Text.literal("Removes the Background of the Tablist")))
-                                        .binding(defaults.removeTablistBackground, () -> config.removeTablistBackground, newVal -> config.removeTablistBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Tablist Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.tablistBackground, () -> config.tablistBackground, newVal -> config.tablistBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Remove Tablist Username Background"))
-                                        .description(OptionDescription.of(Text.literal("Removes the Username background of the Tablist")))
-                                        .binding(defaults.removeTablistUsernameBackground, () -> config.removeTablistUsernameBackground, newVal -> config.removeTablistUsernameBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Tablist Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the tablist background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.tablistBackgroundColor, () -> config.tablistBackgroundColor, newVal -> config.tablistBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Tablist Usernames Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.tablistUsernameBackground, () -> config.tablistUsernameBackground, newVal -> config.tablistUsernameBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
+                                        .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Tablist Username Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the tablist username background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.tablistUsernameBackgroundColor, () -> config.tablistUsernameBackgroundColor, newVal -> config.tablistUsernameBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.literal("Debug Screen"))
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Debug Screen Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.debugScreenBackground, () -> config.debugScreenBackground, newVal -> config.debugScreenBackground = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
+                                        .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Debug Screen Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the debug screen background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.debugScreenBackgroundColor, () -> config.debugScreenBackgroundColor, newVal -> config.debugScreenBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .option(Option.<TextShadowMode>createBuilder()
+                                        .name(Text.literal("Debug Screen Text Shadow"))
+                                        .description(OptionDescription.of(Text.literal("Choose if you want text shadow for the debug screen")))
+                                        .binding(defaults.debugScreenTextShadow, () -> config.debugScreenTextShadow, newVal -> config.debugScreenTextShadow = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(TextShadowMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
                                 .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Text.literal("Text Displays"))
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Text.literal("Force Remove Text Display Background"))
-                                        .description(OptionDescription.of(Text.literal("Makes it so Text Displays are always rendered without a Background")))
-                                        .binding(defaults.forceRemoveTextDisplayBackground, () -> config.forceRemoveTextDisplayBackground, newVal -> config.forceRemoveTextDisplayBackground = newVal)
-                                        .controller(TickBoxControllerBuilder::create)
-                                        .build())
-                                .option(Option.<TextDisplayShadowMode>createBuilder()
-                                        .name(Text.literal("Force Enable/Disable Text Display Shadow"))
-                                        .description(OptionDescription.of(Text.literal("Force Text Shadow to always be enabled or disabled for Text Displays, if set to Default it keeps the value decided by the command that was used to spawn the Text Display")))
-                                        .binding(defaults.forceTextDisplayShadow, () -> config.forceTextDisplayShadow, newVal -> config.forceTextDisplayShadow = newVal)
+                                .option(Option.<BackgroundColorMode>createBuilder()
+                                        .name(Text.literal("Text Display Background Color Options"))
+                                        .description(OptionDescription.of(Text.literal("Switch between the default background, no background and a custom background")))
+                                        .binding(defaults.textDisplayBackground, () -> config.textDisplayBackground, newVal -> config.textDisplayBackground = newVal)
                                         .controller((opt) ->
                                                 EnumControllerBuilder.create(opt)
-                                                        .enumClass(TextDisplayShadowMode.class)
-                                                        .formatValue((it) -> Text.literal(it.name())))
+                                                        .enumClass(BackgroundColorMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
+                                        .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.literal("Text Display Background Color"))
+                                        .description(OptionDescription.of(Text.literal("This changes the color of the text display background (Requires the Color Option to be Custom)")))
+                                        .binding(defaults.textDisplayBackgroundColor, () -> config.textDisplayBackgroundColor, newVal -> config.textDisplayBackgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+                                        .build())
+                                .option(Option.<TextShadowMode>createBuilder()
+                                        .name(Text.literal("Force Enable/Disable Text Display Shadow"))
+                                        .description(OptionDescription.of(Text.literal("Force Text Shadow to always be enabled or disabled for Text Displays, if set to Default it keeps the value decided by the command that was used to spawn the Text Display")))
+                                        .binding(defaults.textDisplayShadow, () -> config.textDisplayShadow, newVal -> config.textDisplayShadow = newVal)
+                                        .controller((opt) ->
+                                                EnumControllerBuilder.create(opt)
+                                                        .enumClass(TextShadowMode.class)
+                                                        .formatValue(it -> Text.literal(it.getDisplayName())))
                                         .build())
                                 .build())
                         .build())
@@ -226,6 +331,12 @@ public class ConfigScreen {
                                         .name(Text.literal("Ender Pearl Hitbox"))
                                         .description(OptionDescription.of(Text.literal("Renders the Hitbox of Ender Pearls")))
                                         .binding(defaults.enderPearlHitbox, () -> config.enderPearlHitbox, newVal -> config.enderPearlHitbox = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Wind Charge Hitbox"))
+                                        .description(OptionDescription.of(Text.literal("Renders the Hitbox of Wind Charges")))
+                                        .binding(defaults.windChargeHitbox, () -> config.windChargeHitbox, newVal -> config.windChargeHitbox = newVal)
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
                                 .option(Option.<Boolean>createBuilder()

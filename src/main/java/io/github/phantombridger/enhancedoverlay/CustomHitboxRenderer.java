@@ -49,6 +49,7 @@ public class CustomHitboxRenderer {
             boolean renderTridentHitbox = ConfigScreen.CONFIG.instance().tridentHitbox;
             boolean renderFishingBobberHitbox = ConfigScreen.CONFIG.instance().fishingBobberHitbox;
             boolean renderEnderPearlHitbox = ConfigScreen.CONFIG.instance().enderPearlHitbox;
+            boolean renderWindChargeHitbox = ConfigScreen.CONFIG.instance().windChargeHitbox;
             boolean renderXpOrbHitbox = ConfigScreen.CONFIG.instance().xpOrbHitbox;
             boolean renderEndCrystalHitbox = ConfigScreen.CONFIG.instance().endCrystalHitbox;
 
@@ -99,6 +100,8 @@ public class CustomHitboxRenderer {
                     shouldRender = renderFishingBobberHitbox;
                 } else if (entity instanceof EnderPearlEntity) {
                     shouldRender = renderEnderPearlHitbox;
+                } else if (entity instanceof WindChargeEntity) {
+                    shouldRender = renderWindChargeHitbox;
                 } else if (entity instanceof ExperienceOrbEntity) {
                     shouldRender = renderXpOrbHitbox;
                 } else if (entity instanceof EndCrystalEntity) {
@@ -111,6 +114,18 @@ public class CustomHitboxRenderer {
                 if (!shouldRender) continue;
 
                 Vec3d pos = entity.getLerpedPos(tickDelta);
+
+                Entity cameraEntity = mc.getCameraEntity();
+
+                if (cameraEntity instanceof PlayerEntity playerCamera) {
+                    if (entity.isInvisibleTo(playerCamera)) continue;
+                } else {
+                    if (entity.isInvisible()) continue;
+                }
+
+                if (entity instanceof PlayerEntity player && player.isSpectator()) {
+                    continue;
+                }
 
                 double interpolatedX = pos.x;
                 double interpolatedY = pos.y;

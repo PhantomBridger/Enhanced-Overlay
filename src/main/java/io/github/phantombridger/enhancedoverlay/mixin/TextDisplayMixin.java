@@ -1,6 +1,7 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
-import io.github.phantombridger.enhancedoverlay.config.TextDisplayShadowMode;
+import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
+import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.DisplayEntityRenderer.TextDisplayEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,33 +18,35 @@ public class TextDisplayMixin {
             at = @At(value = "STORE"),
             ordinal = 2
     )
-    private boolean forceTextDisplayShadow(boolean original) {
-        if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Enable) {
+    private boolean textDisplayTextShadow(boolean shadow) {
+        if (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.ENABLED) {
             return true;
-        } else if  (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Disable){
+        } else if  (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.DISABLED){
             return false;
-        } else if (ConfigScreen.CONFIG.instance().forceTextDisplayShadow == TextDisplayShadowMode.Default) {
-            return original;
+        } else if (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.DEFAULT) {
+            return shadow;
         } else {
-            return original; // this was added so it doesn't break if the value is not True, False or Default
+            return shadow; // added this so it doesn't break if the value is not ENABLED, DISABLED or DEFAULT
         }
     }
 
     // Remove text display background
     @Redirect(
-            method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;"
-                    + "Lnet/minecraft/client/util/math/MatrixStack;"
-                    + "Lnet/minecraft/client/render/VertexConsumerProvider;IF)V",
+            method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/render/VertexConsumer;color(I)Lnet/minecraft/client/render/VertexConsumer;"
             )
     )
-    private VertexConsumer forceRemoveBackgroundColor(VertexConsumer instance, int j) {
-        if (ConfigScreen.CONFIG.instance().forceRemoveTextDisplayBackground) {
-            return instance.color(0);
+    private VertexConsumer textDisplayBackgroundColor(VertexConsumer vertexConsumer, int vanillaColor) {
+        if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.NONE) {
+            return vertexConsumer.color(0);
+        } else if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.CUSTOM) {
+            return vertexConsumer.color(ConfigScreen.CONFIG.instance().textDisplayBackgroundColor.getRGB());
+        } else if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.DEFAULT) {
+            return vertexConsumer.color(vanillaColor);
         } else {
-            return instance.color(j);
+            return vertexConsumer.color(vanillaColor); // added this so it doesn't break if the value is not NONE, CUSTOM or DEFAULT
         }
     }
 }

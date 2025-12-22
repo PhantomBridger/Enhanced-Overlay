@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
     "refmap": "enhanced-overlay-refmap.json",
 	"mixins": [
+		"DebugScreenMixin",
         "NametagMixin",
         "ScoreboardMixin",
 		"SubtitleMixin",

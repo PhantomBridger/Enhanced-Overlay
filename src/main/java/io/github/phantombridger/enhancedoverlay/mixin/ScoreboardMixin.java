@@ -1,5 +1,7 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
+import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
+import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,11 +20,15 @@ public class ScoreboardMixin {
             ),
             index = 4
     )
-    private int disableScoreboardTitleBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().removeScoreboardBackground) {
+    private int scoreboardTitleBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().scoreboardBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
     // Remove scoreboard main background
@@ -35,11 +41,15 @@ public class ScoreboardMixin {
             ),
             index = 4
     )
-    private int disableScoreboardMainBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().removeScoreboardBackground) {
+    private int scoreboardMainBackground(int color) {
+        if (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.NONE) {
             return 0;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.CUSTOM) {
+            return ConfigScreen.CONFIG.instance().scoreboardBackgroundColor.getRGB();
+        } else if (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.DEFAULT) {
             return color;
+        } else {
+            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
         }
     }
     // Force scoreboard text shadow
@@ -51,11 +61,15 @@ public class ScoreboardMixin {
             ),
             index = 5
     )
-    private boolean enableScoreboardTextShadow(boolean shadow) {
-        if (ConfigScreen.CONFIG.instance().scoreboardTextShadow) {
+    private boolean scoreboardTextShadow(boolean shadow) {
+        if (ConfigScreen.CONFIG.instance().scoreboardTextShadow == TextShadowMode.ENABLED) {
             return true;
-        } else {
+        } else if  (ConfigScreen.CONFIG.instance().scoreboardTextShadow == TextShadowMode.DISABLED){
+            return false;
+        } else if (ConfigScreen.CONFIG.instance().scoreboardTextShadow == TextShadowMode.DEFAULT) {
             return shadow;
+        } else {
+            return shadow; // added this so it doesn't break if the value is not ENABLED, DISABLED or DEFAULT
         }
     }
 }
