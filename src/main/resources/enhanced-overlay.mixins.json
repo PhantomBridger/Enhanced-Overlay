@@ -4,8 +4,11 @@
 	"compatibilityLevel": "JAVA_21",
     "refmap": "enhanced-overlay-refmap.json",
 	"mixins": [
+		"ChatMixin",
+		"ChatInputMixin",
 		"DebugScreenMixin",
-        "NametagMixin",
+		"HitboxMixin",
+		"NametagMixin",
         "ScoreboardMixin",
 		"SubtitleMixin",
         "TablistMixin",

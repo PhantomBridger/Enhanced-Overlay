@@ -3,37 +3,36 @@ package io.github.phantombridger.enhancedoverlay.mixin;
 import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
+import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
-import net.minecraft.client.gui.hud.DebugHud;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(DebugHud.class)
+@Mixin(DebugScreenOverlay.class)
 public class DebugScreenMixin {
-    @ModifyArg(
-            method = "drawText(Lnet/minecraft/client/gui/DrawContext;Ljava/util/List;Z)V",
+    @Redirect(
+            method = "renderLines(Lnet/minecraft/client/gui/GuiGraphics;Ljava/util/List;Z)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)V"
-            ),
-            index = 5
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"
+            )
     )
-    private boolean debugScreenTextShadow(boolean shadow) {
+    private void debugScreenTextShadow(GuiGraphics guiGraphics, net.minecraft.client.gui.Font font, String text, int x, int y, int color, boolean shadow) {
         if (ConfigScreen.CONFIG.instance().debugScreenTextShadow == TextShadowMode.ENABLED) {
-            return true;
+            guiGraphics.drawString(font, text, x, y, color, true);
         } else if  (ConfigScreen.CONFIG.instance().debugScreenTextShadow == TextShadowMode.DISABLED){
-            return false;
-        } else if (ConfigScreen.CONFIG.instance().debugScreenTextShadow == TextShadowMode.DEFAULT) {
-            return shadow;
+            guiGraphics.drawString(font, text, x, y, color, false);
         } else {
-            return shadow; // added this so it doesn't break if the value is not ENABLED, DISABLED or DEFAULT
+            guiGraphics.drawString(font, text, x, y, color, shadow);
         }
     }
     @ModifyArg(
-            method = "drawText(Lnet/minecraft/client/gui/DrawContext;Ljava/util/List;Z)V",
+            method = "renderLines(Lnet/minecraft/client/gui/GuiGraphics;Ljava/util/List;Z)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"
             ),
             index = 4
     )
@@ -42,10 +41,8 @@ public class DebugScreenMixin {
             return 0;
         } else if  (ConfigScreen.CONFIG.instance().debugScreenBackground == BackgroundColorMode.CUSTOM) {
             return ConfigScreen.CONFIG.instance().debugScreenBackgroundColor.getRGB();
-        } else if (ConfigScreen.CONFIG.instance().debugScreenBackground == BackgroundColorMode.DEFAULT) {
-            return color;
         } else {
-            return color; // added this so it doesn't break if the value is not None, Custom or DEFAULT
+            return color;
         }
     }
 }

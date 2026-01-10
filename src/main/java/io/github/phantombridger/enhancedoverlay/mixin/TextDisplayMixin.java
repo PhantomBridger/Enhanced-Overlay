@@ -1,52 +1,53 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
-import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.DisplayEntityRenderer.TextDisplayEntityRenderer;
+import net.minecraft.client.renderer.entity.DisplayRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 
-@Mixin(TextDisplayEntityRenderer.class)
+@Mixin(DisplayRenderer.TextDisplayRenderer.class)
 public class TextDisplayMixin {
-    // Force text display shadow
     @ModifyVariable(
-            method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V",
-            at = @At(value = "STORE"),
+            method = "submitInner",
+            at = @At(value = "STORE", ordinal = 0),
             ordinal = 2
     )
     private boolean textDisplayTextShadow(boolean shadow) {
-        if (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.ENABLED) {
+        if (ConfigScreen.CONFIG.instance().textDisplayTextShadow == TextShadowMode.ENABLED) {
             return true;
-        } else if  (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.DISABLED){
+        } else if  (ConfigScreen.CONFIG.instance().textDisplayTextShadow == TextShadowMode.DISABLED){
             return false;
-        } else if (ConfigScreen.CONFIG.instance().textDisplayShadow == TextShadowMode.DEFAULT) {
-            return shadow;
         } else {
-            return shadow; // added this so it doesn't break if the value is not ENABLED, DISABLED or DEFAULT
+            return shadow;
         }
     }
-
-    // Remove text display background
-    @Redirect(
-            method = "render(Lnet/minecraft/client/render/entity/state/TextDisplayEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V",
+    @ModifyVariable(
+            method = "submitInner",
+            at = @At(value = "STORE", ordinal = 0),
+            ordinal = 1
+    )
+    private boolean removeTextDisplayBackgroundPartOne(boolean background) {
+        if (ConfigScreen.CONFIG.instance().removeTextDisplayBackground) {
+            return true;
+        } else {
+            return background;
+        }
+    }
+    @ModifyExpressionValue(
+            method = "submitInner",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/VertexConsumer;color(I)Lnet/minecraft/client/render/VertexConsumer;"
+                    target = "Lnet/minecraft/client/Options;getBackgroundOpacity(F)F"
             )
     )
-    private VertexConsumer textDisplayBackgroundColor(VertexConsumer vertexConsumer, int vanillaColor) {
-        if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.NONE) {
-            return vertexConsumer.color(0);
-        } else if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.CUSTOM) {
-            return vertexConsumer.color(ConfigScreen.CONFIG.instance().textDisplayBackgroundColor.getRGB());
-        } else if (ConfigScreen.CONFIG.instance().textDisplayBackground == BackgroundColorMode.DEFAULT) {
-            return vertexConsumer.color(vanillaColor);
+    private float removeTextDisplayBackgroundPartTwo(float original) {
+        if (ConfigScreen.CONFIG.instance().removeTextDisplayBackground) {
+            return 0.0F;
         } else {
-            return vertexConsumer.color(vanillaColor); // added this so it doesn't break if the value is not NONE, CUSTOM or DEFAULT
+            return original;
         }
     }
 }
