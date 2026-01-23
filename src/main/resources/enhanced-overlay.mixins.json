@@ -8,6 +8,7 @@
 		"ChatInputMixin",
 		"DebugScreenMixin",
 		"HitboxMixin",
+		"ItemMixin",
 		"NametagMixin",
         "ScoreboardMixin",
 		"SubtitleMixin",

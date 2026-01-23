@@ -11,6 +11,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 public class Keybinds {
+    public static KeyMapping TOGGLE_FAKE_ENCHANTMENT_GLINT;
     public static KeyMapping TOGGLE_HIDE_CHAT;
     public static KeyMapping TOGGLE_HITBOX_MODIFICATIONS;
     public static KeyMapping TOGGLE_NAMETAG_BACKGROUND;
@@ -62,6 +63,20 @@ public class Keybinds {
     }
     public static void registerAll() {
         registerConfigKeybind();
+
+        TOGGLE_FAKE_ENCHANTMENT_GLINT = new KeyMapping(
+                "key.enhanced_overlay.toggle_fake_enchantment_glint",
+                GLFW.GLFW_KEY_UNKNOWN,
+                KeyMapping.Category.MISC
+        );
+        registerToggleBind(
+                TOGGLE_FAKE_ENCHANTMENT_GLINT,
+                () -> ConfigScreen.CONFIG.instance().fakeEnchantmentGlint,
+                val -> ConfigScreen.CONFIG.instance().fakeEnchantmentGlint = val,
+                Component.literal("Fake Enchantment Glint"),
+                "Enabled",
+                "Disabled"
+        );
 
         TOGGLE_HIDE_CHAT = new KeyMapping(
                 "key.enhanced_overlay.toggle_hide_chat",

@@ -1,10 +1,6 @@
 package io.github.phantombridger.enhancedoverlay.config;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import dev.isxander.yacl3.api.OptionGroup;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
@@ -12,8 +8,12 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import dev.isxander.yacl3.platform.YACLPlatform;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigScreen {
     public static final ConfigClassHandler<ConfigScreen> CONFIG = ConfigClassHandler.createBuilder(ConfigScreen.class)
@@ -65,6 +65,9 @@ public class ConfigScreen {
     @SerialEntry public boolean removeNametagBackground = true;
     @SerialEntry public TextShadowMode textDisplayTextShadow = TextShadowMode.ENABLED;
     @SerialEntry public boolean removeTextDisplayBackground = true;
+
+    @SerialEntry public boolean fakeEnchantmentGlint = true;
+    @SerialEntry public List<Item> fakeEnchantmentGlintItems = new ArrayList<>(List.of(Items.DIAMOND_SWORD, Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SPEAR, Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS, Items.NETHERITE_SWORD, Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_SPEAR, Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS));
 
 
     public static Screen configScreen(Screen parent) {
@@ -335,6 +338,35 @@ public class ConfigScreen {
                                         .binding(defaults.removeTextDisplayBackground, () -> config.removeTextDisplayBackground, newVal -> config.removeTextDisplayBackground = newVal)
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
+                                .build())
+                        .build())
+                .category(ConfigCategory.createBuilder()
+                        .name(Component.literal("Items"))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.literal("Fake Enchantment Glint"))
+                                .description(OptionDescription.of(Component.literal("This makes it so all items from the list below this option will be rendered with enchantment glint no matter if they are enchanted or not")))
+                                .binding(defaults.fakeEnchantmentGlint, () -> config.fakeEnchantmentGlint, newVal -> config.fakeEnchantmentGlint = newVal)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .group(ListOption.<Item>createBuilder()
+                                .name(Component.literal("Fake Enchantment Glint Items"))
+                                .binding(defaults.fakeEnchantmentGlintItems, () -> config.fakeEnchantmentGlintItems, val -> config.fakeEnchantmentGlintItems = val)
+                                .controller(ItemControllerBuilder::create)
+                                .initial(Items.DIAMOND_SWORD)
+                                .insertEntriesAtEnd(true)
+                                .build())
+                        .build())
+                .category(ConfigCategory.createBuilder()
+                        .name(Component.literal("Reset Config Options"))
+                        .option(ButtonOption.createBuilder()
+                                .name(Component.literal("Reset Config"))
+                                .description(OptionDescription.of(Component.literal("Resets the config to default except for the force enchant glint items list, you have to click the reset icon next to the list to reset that")))
+                                .action((screen, option) -> ConfigUtils.reset(config, screen))
+                                .build())
+                        .option(ButtonOption.createBuilder()
+                                .name(Component.literal("Set Config to Vanilla"))
+                                .description(OptionDescription.of(Component.literal("Sets the config to vanilla values except for the force enchant glint items list, you have to click the remove buttons for all the items but since the items move up when you delete the first item you can just spam click")))
+                                .action((screen, option) -> ConfigUtils.setToVanilla(config, screen))
                                 .build())
                         .build())
         )).generateScreen(parent);
