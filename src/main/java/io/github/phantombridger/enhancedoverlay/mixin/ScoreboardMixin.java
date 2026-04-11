@@ -1,7 +1,5 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
-import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
-import io.github.phantombridger.enhancedoverlay.config.TextShadowMode;
 import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,34 +12,30 @@ public class ScoreboardMixin {
             method = "displayScoreboardSidebar",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"
             ),
             index = 4
     )
     private int scoreboardBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.NONE) {
-            return 0;
-        } else if  (ConfigScreen.CONFIG.instance().scoreboardBackground == BackgroundColorMode.CUSTOM){
-            return ConfigScreen.CONFIG.instance().scoreboardBackgroundColor.getRGB();
-        } else {
-            return color;
-        }
+        return switch (ConfigScreen.CONFIG.instance().scoreboardBackground) {
+            case NONE -> 0;
+            case CUSTOM -> ConfigScreen.CONFIG.instance().scoreboardBackgroundColor.getRGB();
+            default -> color;
+        };
     }
     @ModifyArg(
             method = "displayScoreboardSidebar",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V"
             ),
             index = 5
     )
     private boolean scoreboardTextShadow(boolean shadow) {
-        if (ConfigScreen.CONFIG.instance().scoreboardTextShadow == TextShadowMode.ENABLED) {
-            return true;
-        } else if  (ConfigScreen.CONFIG.instance().scoreboardTextShadow == TextShadowMode.DISABLED){
-            return false;
-        } else {
-            return shadow;
-        }
+        return switch (ConfigScreen.CONFIG.instance().scoreboardTextShadow) {
+            case ENABLED -> true;
+            case DISABLED -> false;
+            default -> shadow;
+        };
     }
 }

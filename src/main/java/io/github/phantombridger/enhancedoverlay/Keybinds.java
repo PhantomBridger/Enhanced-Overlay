@@ -1,7 +1,7 @@
 package io.github.phantombridger.enhancedoverlay;
 
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
@@ -24,7 +24,7 @@ public class Keybinds {
                 GLFW.GLFW_KEY_UNKNOWN,
                 KeyMapping.Category.MISC
         );
-        KeyBindingHelper.registerKeyBinding(OPEN_CONFIG);
+        KeyMappingHelper.registerKeyMapping(OPEN_CONFIG);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (OPEN_CONFIG.consumeClick()) {
@@ -43,7 +43,7 @@ public class Keybinds {
             String trueLabel,
             String falseLabel
     ) {
-        KeyBindingHelper.registerKeyBinding(keyMapping);
+        KeyMappingHelper.registerKeyMapping(keyMapping);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyMapping.consumeClick()) {
@@ -51,11 +51,10 @@ public class Keybinds {
                 setter.accept(newValue);
 
                 if (client.player != null) {
-                    client.player.displayClientMessage(
+                    client.player.sendOverlayMessage(
                             messagePrefix.copy()
                                     .append(": ")
-                                    .append(Component.literal(newValue ? trueLabel : falseLabel)),
-                            true
+                                    .append(Component.literal(newValue ? trueLabel : falseLabel))
                     );
                 }
             }

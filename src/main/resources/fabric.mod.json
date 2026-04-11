@@ -27,11 +27,10 @@
 		"enhanced-overlay.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.3",
-		"fabric-key-binding-api-v1": "*",
-		"minecraft": "1.21.11",
-		"java": ">=21",
+		"fabricloader": ">=0.18.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
 		"fabric-api": "*",
-		"yet_another_config_lib_v3": ">=3.8.1"
+		"yet_another_config_lib_v3": ">=3.9.1"
 	}
 }

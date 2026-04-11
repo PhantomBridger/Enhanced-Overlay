@@ -1,6 +1,5 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
-import io.github.phantombridger.enhancedoverlay.config.BackgroundColorMode;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,75 +9,67 @@ import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 @Mixin(PlayerTabOverlay.class)
 public class TablistMixin {
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V",
                     ordinal = 0
             ),
             index = 4
     )
     private int tablistBackgroundOne(int color) {
-        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
-            return 0;
-        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
-            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
-        } else {
-            return color;
-        }
+        return switch (ConfigScreen.CONFIG.instance().tablistBackground) {
+            case NONE -> 0;
+            case CUSTOM -> ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+            default -> color;
+        };
     }
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V",
                     ordinal = 1
             ),
             index = 4
     )
     private int tablistBackgroundTwo(int color) {
-        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
-            return 0;
-        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
-            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
-        } else {
-            return color;
-        }
+        return switch (ConfigScreen.CONFIG.instance().tablistBackground) {
+            case NONE -> 0;
+            case CUSTOM -> ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+            default -> color;
+        };
     }
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V",
                     ordinal = 3
             ),
             index = 4
     )
     private int tablistBackgroundThree(int color) {
-        if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.NONE) {
-            return 0;
-        } else if (ConfigScreen.CONFIG.instance().tablistBackground == BackgroundColorMode.CUSTOM) {
-            return ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
-        } else {
-            return color;
-        }
+        return switch (ConfigScreen.CONFIG.instance().tablistBackground) {
+            case NONE -> 0;
+            case CUSTOM -> ConfigScreen.CONFIG.instance().tablistBackgroundColor.getRGB();
+            default -> color;
+        };
     }
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V",
                     ordinal = 2
             ),
             index = 4
     )
     private int tablistUsernameBackground(int color) {
-        if (ConfigScreen.CONFIG.instance().tablistUsernameBackground == BackgroundColorMode.NONE) {
-            return 0;
-        } else if (ConfigScreen.CONFIG.instance().tablistUsernameBackground == BackgroundColorMode.CUSTOM) {
-            return ConfigScreen.CONFIG.instance().tablistUsernameBackgroundColor.getRGB();
-        } else {
-            return color;
-        }
+        return switch (ConfigScreen.CONFIG.instance().tablistUsernameBackground) {
+            case NONE -> 0;
+            case CUSTOM -> ConfigScreen.CONFIG.instance().tablistUsernameBackgroundColor.getRGB();
+            default -> color;
+        };
     }
 }
