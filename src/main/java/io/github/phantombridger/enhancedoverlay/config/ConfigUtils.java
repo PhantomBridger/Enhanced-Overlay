@@ -16,13 +16,13 @@ public class ConfigUtils {
         MutableComponent description = (MutableComponent) Component.literal("This cannot be undone.")
                 .withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000)).withBold(true));
 
-        Minecraft.getInstance().setScreen(new ConfirmScreen(
+        Minecraft.getInstance().gui.setScreen(new ConfirmScreen(
                 result -> {
                     if (result) {
                         resetConfig(config);
-                        Minecraft.getInstance().setScreen(null);
+                        Minecraft.getInstance().gui.setScreen(null);
                     } else {
-                        Minecraft.getInstance().setScreen(ConfigScreen.configScreen(screen));
+                        Minecraft.getInstance().gui.setScreen(ConfigScreen.configScreen(screen));
                     }
                 },
                 title,
@@ -69,12 +69,13 @@ public class ConfigUtils {
         config.debugScreenBackground = BackgroundColorMode.NONE;
         config.debugScreenBackgroundColor = new Color(0, 0, 0, 42);
 
+        config.hideFirstPersonEffectParticles = true;
         config.nametagTextShadow = TextShadowMode.ENABLED;
         config.removeNametagBackground = true;
         config.textDisplayTextShadow = TextShadowMode.ENABLED;
         config.removeTextDisplayBackground = true;
 
-        config.fakeEnchantmentGlint = true;
+        config.fakeEnchantmentGlint = false;
 
         ConfigScreen.CONFIG.save();
     }
@@ -85,13 +86,13 @@ public class ConfigUtils {
         MutableComponent description = (MutableComponent) Component.literal("This cannot be undone.")
                 .withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000)).withBold(true));
 
-        Minecraft.getInstance().setScreen(new ConfirmScreen(
+        Minecraft.getInstance().gui.setScreen(new ConfirmScreen(
                 result -> {
                     if (result) {
                         setConfigToVanilla(config);
-                        Minecraft.getInstance().setScreen(null);
+                        Minecraft.getInstance().gui.setScreen(null);
                     } else {
-                        Minecraft.getInstance().setScreen(ConfigScreen.configScreen(screen));
+                        Minecraft.getInstance().gui.setScreen(ConfigScreen.configScreen(screen));
                     }
                 },
                 title,
@@ -139,6 +140,7 @@ public class ConfigUtils {
         config.debugScreenBackground = BackgroundColorMode.DEFAULT;
         config.debugScreenBackgroundColor = new Color(0, 0, 0, 42);
 
+        config.hideFirstPersonEffectParticles = false;
         config.nametagTextShadow = TextShadowMode.DEFAULT;
         config.removeNametagBackground = false;
         config.textDisplayTextShadow = TextShadowMode.DEFAULT;

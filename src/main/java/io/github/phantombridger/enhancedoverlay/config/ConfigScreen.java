@@ -61,12 +61,13 @@ public class ConfigScreen {
     @SerialEntry public BackgroundColorMode debugScreenBackground = BackgroundColorMode.NONE;
     @SerialEntry public Color debugScreenBackgroundColor = new Color(0, 0, 0, 42);
 
+    @SerialEntry public boolean hideFirstPersonEffectParticles = true;
     @SerialEntry public TextShadowMode nametagTextShadow = TextShadowMode.ENABLED;
     @SerialEntry public boolean removeNametagBackground = true;
     @SerialEntry public TextShadowMode textDisplayTextShadow = TextShadowMode.ENABLED;
     @SerialEntry public boolean removeTextDisplayBackground = true;
 
-    @SerialEntry public boolean fakeEnchantmentGlint = true;
+    @SerialEntry public boolean fakeEnchantmentGlint = false;
     @SerialEntry public List<Item> fakeEnchantmentGlintItems = new ArrayList<>(List.of(Items.DIAMOND_SWORD, Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SPEAR, Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS, Items.NETHERITE_SWORD, Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_SPEAR, Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS));
 
 
@@ -305,6 +306,12 @@ public class ConfigScreen {
                         .build())
                 .category(ConfigCategory.createBuilder()
                         .name(Component.literal("Entities"))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.literal("Hide First Person Effect Particles"))
+                                .description(OptionDescription.of(Component.literal("This hides your own potion effect particles while youre playing in first person.")))
+                                .binding(defaults.hideFirstPersonEffectParticles, () -> config.hideFirstPersonEffectParticles, newVal -> config.hideFirstPersonEffectParticles = newVal)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
                         .group(OptionGroup.createBuilder()
                                 .name(Component.literal("Nametags"))
                                 .option(Option.<TextShadowMode>createBuilder()
@@ -353,7 +360,7 @@ public class ConfigScreen {
                                 .binding(defaults.fakeEnchantmentGlintItems, () -> config.fakeEnchantmentGlintItems, val -> config.fakeEnchantmentGlintItems = val)
                                 .controller(ItemControllerBuilder::create)
                                 .initial(Items.DIAMOND_SWORD)
-                                .insertEntriesAtEnd(true)
+                                .insertEntriesAtEnd(false)
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()

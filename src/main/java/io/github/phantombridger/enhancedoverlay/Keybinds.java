@@ -29,7 +29,7 @@ public class Keybinds {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (OPEN_CONFIG.consumeClick()) {
                 if (client.player != null) {
-                    client.setScreen(ConfigScreen.configScreen(client.screen));
+                    client.gui.setScreen(ConfigScreen.configScreen(client.gui.screen()));
                 }
             }
         });
