@@ -1,20 +1,20 @@
 package io.github.phantombridger.enhancedoverlay.mixin;
 
-import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 
-@Mixin(NameTagFeatureRenderer.class)
+@Mixin(SubmitNodeCollection.class)
 public class NametagMixin {
     @ModifyArg(
-            method = "prepareText",
+            method = "nameTag",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/Font;prepareText(Lnet/minecraft/util/FormattedCharSequence;FFIZZI)Lnet/minecraft/client/gui/Font$PreparedText;"
+                    target = "Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Content$Text;<init>(FFLnet/minecraft/util/FormattedCharSequence;ZIII)V"
             ),
-            index = 4
+            index = 3
     )
     private static boolean nametagTextShadow(boolean shadow) {
         return switch (ConfigScreen.CONFIG.instance().nametagTextShadow) {
@@ -24,12 +24,12 @@ public class NametagMixin {
         };
     }
     @ModifyArg(
-            method = "prepareText",
+            method = "nameTag",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/Font;prepareText(Lnet/minecraft/util/FormattedCharSequence;FFIZZI)Lnet/minecraft/client/gui/Font$PreparedText;"
+                    target = "Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Content$Text;<init>(FFLnet/minecraft/util/FormattedCharSequence;ZIII)V"
             ),
-            index = 6
+            index = 5
     )
     private static int removeNametagBackground(int color) {
         if (ConfigScreen.CONFIG.instance().removeNametagBackground) {

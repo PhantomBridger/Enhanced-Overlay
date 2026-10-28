@@ -1,11 +1,11 @@
 package io.github.phantombridger.enhancedoverlay;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.phantombridger.enhancedoverlay.config.ConfigScreen;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
@@ -21,7 +21,7 @@ public class Keybinds {
     public static void registerConfigKeybind() {
         OPEN_CONFIG = new KeyMapping(
                 "key.enhanced_overlay.open_config",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         KeyMappingHelper.registerKeyMapping(OPEN_CONFIG);
@@ -65,7 +65,7 @@ public class Keybinds {
 
         TOGGLE_FAKE_ENCHANTMENT_GLINT = new KeyMapping(
                 "key.enhanced_overlay.toggle_fake_enchantment_glint",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         registerToggleBind(
@@ -79,7 +79,7 @@ public class Keybinds {
 
         TOGGLE_HIDE_CHAT = new KeyMapping(
                 "key.enhanced_overlay.toggle_hide_chat",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         registerToggleBind(
@@ -93,7 +93,7 @@ public class Keybinds {
 
         TOGGLE_HITBOX_MODIFICATIONS = new KeyMapping(
                 "key.enhanced_overlay.toggle_hitbox_modifications",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         registerToggleBind(
@@ -106,7 +106,7 @@ public class Keybinds {
 
         TOGGLE_NAMETAG_BACKGROUND = new KeyMapping(
                 "key.enhanced_overlay.toggle_nametag_background",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         registerToggleBind(
@@ -119,7 +119,7 @@ public class Keybinds {
 
         TOGGLE_TEXT_BACKGROUND = new KeyMapping(
                 "key.enhanced_overlay.toggle_text_background",
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(),
                 KeyMapping.Category.MISC
         );
         registerToggleBind(
